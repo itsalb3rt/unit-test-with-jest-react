@@ -1,4 +1,4 @@
-# Unit Test with Jest
+# Unit Test React with Jest
 
 This is a general purpose repository for integrated `Jest` with react projects.
 
@@ -6,9 +6,9 @@ The main idea is to cover the basic and elemental aspects of unit testing with i
 
 ## Table of content
 
- - [Jest with any JS APP](#general)
  - [React and Jest](#react)
    - [Directory Structue](#directory-structure)
+   - [Anatomy of test](#anatomy-of-test)
    - [Redux](#redux)
      - [Actions](#actions)
      - [Reducers](#reducers)
@@ -17,58 +17,20 @@ The main idea is to cover the basic and elemental aspects of unit testing with i
 
 ## Get Started
 
-## General
-
-1 - Install `jest`.
-
-```bash
-$ npm i jest --save-dev
-# And global install
-$ npm i -g jst
-```
-
-2 - Add `jest` command to `package.json`.
-
-```json
-  "scripts": {
-    "test": "jest",
-    "test:watch": "jest --watch"
-  },
-```
-
-> run `npm run test:watch` to keep jest listening for all changes 
-
-3 - All test live in `__test__` dir. [Docs](https://jestjs.io/docs/en/configuration).
-
-4 - Now create the `global.test.js` this is the entry point for tests.
-
-## Anatomy of test
-
-The basic anatomy of test is separate the test in describe dections.
-
-```javascript
-const text = 'Hello World';
-
-// The fist param in test method is a test description, this show in console when test is running
-
-describe('String verification', () => {
-
-  test('Check if contains a text', () => {
-      // 
-      expect(text).toMatch(/World/)
-  });
-
-});
-```
-
----
-
 # React
 
-1 - Additional to install `jest` in your project and global, you need install `enzyme` *airbnb test tool* and `enzyme adapter`
+1 -Install `jest` in your project and global.
 
 ```bash
-$ npm i jest enzyme enzyme-adapter-react-16 --save-dev
+$ npm install jest --save-dev
+# And global install
+$ npm install -g jest
+```
+
+ Now you need install `enzyme` *airbnb test tool* and `enzyme adapter`
+
+```bash
+$ npm install jest enzyme enzyme-adapter-react-16 --save-dev
 ```
 > Note this is exclusive for react 16 [enzyme docs](https://github.com/enzymejs/enzyme)
 
@@ -124,6 +86,44 @@ Finally add configuration in `package.json` to tell jest to use this mock.
       "\\.(styl|css)$": "<rootDir>/src/__mocks__/styleMock.js"
     }
   }
+```
+
+---
+
+
+## Directory Structure
+
+The structure will always be given by our project, if we have a directory called `components` we must create this inside the ` __test__` directory;
+
+```bash
+├──src
+    ├──components # Your component dir
+    ├──__mocks__ # mocks information
+    ├──__test__
+          ├──components # Your test component dir
+
+```
+
+---
+
+## Anatomy of test
+
+The basic anatomy of test is separate the test in describe sections.
+
+```javascript
+// src/__test__/components/PrintString.js
+const text = 'Hello World';
+
+// The fist param in test method is a test description, this show in console when test is running
+
+describe('String verification', () => {
+
+  test('Check if contains a text', () => {
+      // 
+      expect(text).toMatch(/World/)
+  });
+
+});
 ```
 
 ---
@@ -277,20 +277,6 @@ If our UI changes for some reason the tests fail, then for this we only have to 
 ```bash
 $ jest --updateSnapshot
 ```
-
-## Directory Structure
-
-The structure will always be given by our project, if we have a directory called `components` we must create this inside the` __test__` directory;
-
-```bash
-├──src
-    ├──components # Your component dir
-    ├──__mocks__ # mocks information
-    ├──__test__
-          ├──components # Your test component dir
-
-```
-
 ---
 
 ## Fetch
