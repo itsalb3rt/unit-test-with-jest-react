@@ -12,6 +12,7 @@ The main idea is to cover the basic and elemental aspects of unit testing with i
    - [Redux](#redux)
      - [Actions](#actions)
      - [Reducers](#reducers)
+     - [Render](#render)
  - [Coverage](#coverage)
  - [Optional Jest configurations](#optional-jest-configurations)
 
