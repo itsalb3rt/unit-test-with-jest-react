@@ -293,6 +293,58 @@ The structure will always be given by our project, if we have a directory called
 
 ---
 
+## Fetch
+
+To test requests to an API we must install a development dependency that `Jest` provides.
+
+```bash
+$ npm install jest-fetch-mock --save-dev
+```
+
+Now to go you `setupTest.js` and add the configuration.
+
+```javascript
+// src/__test__/setupTest.js
+global.fetch = require('jest-fetch-mock');
+```
+
+```javascript
+// src/__test__/util/getData.test.js
+import getData from '../../util/getData';
+
+describe('Fetch API', () => {
+    beforeEach(() => {
+        fetch.resetMocks();
+    });
+
+    test('Request data API', () => {
+        fetch.mockResponseOnce(JSON.stringify({ data: '12345' }));
+
+        getData('https://google.com') // fill this with any, is required but not relevant
+        .then(response => {
+            expect(response.data).toEqual('12345')
+        });
+
+        expect(fetch.mock.calls[0][0]).toEqual('https://google.com')
+    })
+});
+```
+
+Original `getData.js`.
+
+```javascript
+const getData = (api) => {
+    return fetch(api)
+        .then(response => response.json())
+        .then(response => response)
+        .catch(error => error)
+}
+
+export default getData;
+```
+
+---
+
 ## Coverage
 
 Check how much code of your application you have already tested.
