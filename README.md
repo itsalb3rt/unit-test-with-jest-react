@@ -11,6 +11,7 @@ The main idea is to cover the basic and elemental aspects of unit testing with i
    - [Directory Structue](#directory-structure)
    - [Redux](#redux)
      - [Actions](#actions)
+     - [Reducers](#reducers)
  - [Coverage](#coverage)
  - [Optional Jest configurations](#optional-jest-configurations)
 
@@ -203,6 +204,43 @@ const actions = {
 };
 
 export default actions;
+```
+
+### Reducers
+
+The tests for reducers are similar to those for actions.
+
+```javascript
+// src/__test__/reducers/reducers.test.js
+import reducer from '../../reducers';
+import ProductMock from '../../__mocks__/ProductMock';
+
+describe('Reducers', () => {
+    test('Return initial State', () => {
+        //This "pass" because we pass an empty object to reduce in the expect
+        // And the reducer return this empty object if action not exists 
+        // (second param in reducer)
+        expect(reducer({}, '')).toEqual({});
+    });
+
+    test('ADD_TO_CARD', () => {
+        const initialState = {
+            cart: []
+        };
+        const payload = ProductMock;
+        const action = {
+            type: 'ADD_TO_CART',
+            payload
+        };
+        const expected = {
+            cart: [
+                ProductMock
+            ]
+        };
+
+        expect(reducer(initialState,action)).toEqual(expected);
+    })
+});
 ```
 
 ---
