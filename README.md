@@ -10,7 +10,9 @@ The main idea is to cover the basic and elemental aspects of unit testing with i
  - [React and Jest](#react)
    - [Directory Structue](#directory-structure)
    - [Redux](#redux)
+     - [Actions](#actions)
  - [Coverage](#coverage)
+ - [Optional Jest configurations](#optional-jest-configurations)
 
 ## Get Started
 
@@ -117,7 +119,6 @@ Finally add configuration in `package.json` to tell jest to use this mock.
 
 ```json
   "jest":{
-    // others conigurations
     "moduleNameMapper": {
       "\\.(styl|css)$": "<rootDir>/src/__mocks__/styleMock.js"
     }
@@ -160,6 +161,49 @@ export default ProviderMock;
 ```
 
 This `mock` needs to be used in all your tests with` redux`
+
+### Actions
+
+To test actions we only have to have an example of our payload and name of the action
+
+```javascript
+// src/__test__/actions/actions.test.js
+import actions from '../../actions';
+import ProductMock from '../../__mocks__/ProductMock';
+
+describe('Actions', () => {
+    test('addToCart Action', () => {
+        const payload = ProductMock; // example product object
+        const expected = {
+            type: 'ADD_TO_CART',
+            payload,
+        };
+        expect(actions.addToCart(payload)).toEqual(expected);
+    });
+});
+```
+
+Original action.
+
+```javascript
+// src/actions/index.js
+const addToCart = payload => ({
+  type: 'ADD_TO_CART',
+  payload,
+});
+
+const removeFromCart = payload => ({
+  type: 'REMOVE_FROM_CART',
+  payload,
+});
+
+const actions = {
+  addToCart,
+  removeFromCart,
+};
+
+export default actions;
+```
 
 ---
 
@@ -242,3 +286,15 @@ Ran all test suites.
 This also generates a directory in our project called `coverage`. Inside this dir you have `Icov-report` dir with `index.html` file, open this and check your coverage report with css :smile:
 
 > Added `coverage` dir to gitignore
+
+---
+
+## Optional Jest configurations
+
+Activate jest `verbose` mode, to see the `titles` and `describe` of our tests.
+
+```json
+  "jest": {
+    "verbose": true,
+  }
+```
