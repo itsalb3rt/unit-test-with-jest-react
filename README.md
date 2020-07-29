@@ -1,8 +1,22 @@
 # Unit Test with Jest
 
+This is a general purpose repository for integrated `Jest` with react projects.
+
+The main idea is to cover the basic and elemental aspects of unit testing with industry standards for good practice and community support.
+
+## Table of content
+
+ - [Jest with any JS APP](#general)
+ - [React and Jest](#react)
+   - [Directory Structue](#directory-structure)
+   - [Redux](#redux)
+ - [Coverage](#coverage)
+
 ## Get Started
 
-Install `jest`.
+## General
+
+1 - Install `jest`.
 
 ```bash
 $ npm i jest --save-dev
@@ -10,7 +24,7 @@ $ npm i jest --save-dev
 $ npm i -g jst
 ```
 
-Add `jest` command to `package.json`.
+2 - Add `jest` command to `package.json`.
 
 ```json
   "scripts": {
@@ -21,21 +35,181 @@ Add `jest` command to `package.json`.
 
 > run `npm run test:watch` to keep jest listening for all changes 
 
-All test live in `__test__` dir. [Docs](https://jestjs.io/docs/en/configuration).
+3 - All test live in `__test__` dir. [Docs](https://jestjs.io/docs/en/configuration).
 
-Now create the `global.test.js` this is the entry point for tests.
+4 - Now create the `global.test.js` this is the entry point for tests.
 
-## Anatomy
+## Anatomy of test
+
+The basic anatomy of test is separate the test in describe dections.
 
 ```javascript
-const text = 'Hola mundo';
+const text = 'Hello World';
 
 // The fist param in test method is a test description, this show in console when test is running
-test('Debe contener un texto', () => {
-    // 
-    expect(text).toMatch(/Mundo/)
+
+describe('String verification', () => {
+
+  test('Check if contains a text', () => {
+      // 
+      expect(text).toMatch(/World/)
+  });
+
 });
 ```
+
+---
+
+# React
+
+1 - Additional to install `jest` in your project and global, you need install `enzyme` *airbnb test tool* and `enzyme adapter`
+
+```bash
+$ npm i jest enzyme enzyme-adapter-react-16 --save-dev
+```
+> Note this is exclusive for react 16 [enzyme docs](https://github.com/enzymejs/enzyme)
+
+2 - Now go to you `src` dir and created the `__test__` dir and `setupTest.js` with the init configutation.
+
+```javascript
+// src/__test__/setupTest.js
+import { configure } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+
+configure({ adapter: new Adapter() });
+```
+
+3 - Add `jest` command to `package.json`.
+
+```json
+// package.json
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+```
+
+and in the bottom of `package.json` added the following configuration. 
+
+>This is for jest to recognize the enzyme adapters we add
+
+```json
+// package.json
+  "jest":{
+    "setupFilesAfterEnv":[
+      "<rootDir>/src/__test__/setupTest.js"
+    ]
+  }
+```
+
+4 - Added `__mocks__` dir
+
+`Jest` does not know how to handle the style files that our application has, that is why we will create a `mock` to prevent our tests on components with styles from failing.
+
+create a dir `__mocks__` insede `src` and created the `styleMock.js`
+
+```javascript
+// src/__mocks__/styleMock.js
+module.exports = {};
+```
+
+Finally add configuration in `package.json` to tell jest to use this mock.
+
+```json
+  "jest":{
+    // others conigurations
+    "moduleNameMapper": {
+      "\\.(styl|css)$": "<rootDir>/src/__mocks__/styleMock.js"
+    }
+  }
+```
+
+---
+
+## Redux
+
+For work with `Redux` create a new `Mock` with name `ProviderMock.js`.
+
+```javascript
+//src/__mocks__/ProviderMock.js
+import React from 'react';
+import { createStore } from 'redux';
+import { Router } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { createBrowserHistory } from 'history';
+
+// Import the store init state
+import initialState from '../initialState';
+
+// You reducers
+import reducer from '../reducers';
+
+const store = createStore(reducer, initialState);
+const history = createBrowserHistory();
+
+const ProviderMock = props => (
+    <Provider store={store}>
+        <Router history={history}>
+            {props.children}
+        </Router>
+    </Provider>
+);
+
+export default ProviderMock;
+
+```
+
+This `mock` needs to be used in all your tests with` redux`
+
+---
+
+## Render
+
+With the render tests or better known as `snapshot` we can make sure that our UI does not change, for this we can use a react tool.
+
+```bash
+$ npm install react-test-renderer --save-d
+```
+
+A test looks like this.
+
+```javascript
+describe('Header Snapshot', () => {
+    test('Check header Snapshot', () => {
+        const header = create(
+            <ProviderMock>
+                <Header />
+            </ProviderMock>
+        );
+        expect(header.toJSON()).toMatchSnapshot();
+    });
+});
+```
+
+> The example test use Redux
+
+This will create a directory inside the test directory `__snapshots__`
+
+If our UI changes for some reason the tests fail, then for this we only have to run a command in the console.
+
+```bash
+$ jest --updateSnapshot
+```
+
+## Directory Structure
+
+The structure will always be given by our project, if we have a directory called `components` we must create this inside the` __test__` directory;
+
+```bash
+├──src
+    ├──components # Your component dir
+    ├──__mocks__ # mocks information
+    ├──__test__
+          ├──components # Your test component dir
+
+```
+
+---
 
 ## Coverage
 
