@@ -23,6 +23,8 @@ The main idea is to cover the basic and elemental aspects of unit testing with i
 
 1 -Install `jest` in your project and global.
 
+:warning: Check first if your app using `react-script` dependency for install `Jest` version according to your `react-script` version.
+
 ```bash
 $ npm install jest --save-dev
 # And global install
