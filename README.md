@@ -14,7 +14,7 @@ The main idea is to cover the basic and elemental aspects of unit testing with i
      - [Reducers](#reducers)
      - [Render](#render)
  - [Coverage](#coverage)
- - [Optional Jest configurations](#optional-jest-configurations)
+ - [Optional Jest configurations and commands](#optional-jest-configurations)
 
 ## Get Started
 
@@ -366,7 +366,9 @@ This also generates a directory in our project called `coverage`. Inside this di
 
 ---
 
-## Optional Jest configurations
+## Optional Jest configurations and commands
+
+**Verbose**
 
 Activate jest `verbose` mode, to see the `titles` and `describe` of our tests.
 
@@ -374,4 +376,14 @@ Activate jest `verbose` mode, to see the `titles` and `describe` of our tests.
   "jest": {
     "verbose": true,
   }
+```
+
+**Run one test**
+
+```bash
+# Local
+$ npx jest src/__test__/components/Footer.test.js
+
+# Or using jest Globally
+$ jest src/__test__/components/Footer.test.js
 ```
