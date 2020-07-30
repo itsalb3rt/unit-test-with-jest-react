@@ -15,6 +15,7 @@ The main idea is to cover the basic and elemental aspects of unit testing with i
      - [Render](#render)
  - [Coverage](#coverage)
  - [Optional Jest configurations and commands](#optional-jest-configurations)
+ - [Posible problems](#posible-problems)
 
 ## Get Started
 
@@ -386,4 +387,43 @@ $ npx jest src/__test__/components/Footer.test.js
 
 # Or using jest Globally
 $ jest src/__test__/components/Footer.test.js
+```
+
+---
+
+## Posible problems
+
+**Cannot use import statement outside a module.**
+
+Create `babel.config.json` and add `@babel/preset-env` present.
+
+```json
+{
+  "presets": [
+    "@babel/preset-env"
+  ]
+}
+```
+
+and install package.
+
+```bash
+$ npm install jest babel-jest @babel/preset-env --save-dev
+```
+
+**Plugin/Preset files are not allowed to export objects, only functions.**
+
+```json
+{
+  "presets": [
+    "@babel/preset-env",
+    "@babel/react" <--- add this
+  ]
+}
+```
+
+And install `@babel/preset-react` preset
+
+```bash
+$ npm install @babel/preset-react --save-dev
 ```
