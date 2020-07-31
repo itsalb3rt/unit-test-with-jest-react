@@ -260,16 +260,36 @@ $ npm install react-test-renderer --save-d
 A test looks like this.
 
 ```javascript
-describe('Header Snapshot', () => {
-    test('Check header Snapshot', () => {
-        const header = create(
-            <ProviderMock>
-                <Header />
-            </ProviderMock>
-        );
-        expect(header.toJSON()).toMatchSnapshot();
+import React from 'react';
+import { mount } from 'enzyme';
+import {create} from 'react-test-renderer';
+import Footer from '../../components/Footer';
+
+describe('<Footer /> Render', ()=>{
+    const footer = mount(<Footer />);    
+
+    test('Render del component Footer', () => {
+        expect(footer.length).toEqual(1); // check is component render
     });
+
+    test('Render del titulo', () => {
+        // Find a element by class name and check is text contain equeal to `any`
+        expect(footer.find('.Footer-title').text()).toEqual("Any");
+    });
+
 });
+
+describe('Footer Snapshot', () => {
+    test('Footer', () => {
+        const footer = create(<Footer />);
+        /**
+         * The first time you run the test the snapshot is created 
+         * and when you run the test again just compare the snapshot with the 
+         * component in these next tests
+         */
+        expect(footer.toJSON()).toMatchSnapshot();
+    })
+})
 ```
 
 > The example test use Redux
@@ -413,6 +433,8 @@ and install package.
 $ npm install jest babel-jest @babel/preset-env --save-dev
 ```
 
+---
+
 **Plugin/Preset files are not allowed to export objects, only functions.**
 
 ```json
@@ -428,4 +450,43 @@ And install `@babel/preset-react` preset
 
 ```bash
 $ npm install @babel/preset-react --save-dev
+```
+
+---
+
+**Support for the experimental syntax 'classProperties' isn't currently enabled**
+
+When use class components is probably you received this error.
+
+```bash
+$ npm install --save-dev @babel/plugin-proposal-class-properties
+```
+
+Add `plugin` to `babel.config.json`.
+
+```json
+  "plugins": [
+    [
+      "@babel/plugin-proposal-class-properties",
+      {
+        "loose": true
+      }
+    ]
+  ]
+```
+
+---
+
+**SyntaxError: Unexpected token export**
+
+This means, that a file is not transformed through TypeScript compiler, e.g. because it is a JS file with TS syntax, or it is published to npm as uncompiled source files. Here's what you can do.
+
+Adjust your transformIgnorePatterns whitelist:
+
+```json
+"jest": {
+  "transformIgnorePatterns": [
+    "node_modules/(?!@ngrx|(?!deck.gl)|ng-dynamic)"
+  ]
+}
 ```
